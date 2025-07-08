@@ -3,7 +3,7 @@
 # Use "Send Request" button above each request to execute
 
 @Central.WebApi_HostAddress = http://localhost:5269
-@Central_WebApi_HostAddress = http://localhost:5269
+@Central_WebApi_HostAddress = http://localhost:5000
 @baseUrl = {{Central_WebApi_HostAddress}}/api
 
 # Test variables (replace with actual IDs after creating resources)
@@ -23,30 +23,6 @@ Accept: application/json
 ###############################################################################
 # BUNDLE ENDPOINTS
 ###############################################################################
-
-### Get all bundles (with pagination)
-GET {{baseUrl}}/bundles
-Accept: application/json
-
-### Get bundles with search and pagination
-GET {{baseUrl}}/bundles?page=1&pageSize=5&search=carbon&sortBy=name&sortDescending=false
-Accept: application/json
-
-### Get bundles with filters
-GET {{baseUrl}}/bundles?name=carbon&key=carbon_footprint
-Accept: application/json
-
-### Get bundle by ID
-GET {{baseUrl}}/bundles/{{bundleId}}
-Accept: application/json
-
-### Get bundle by key
-GET {{baseUrl}}/bundles/key/carbon_footprint
-Accept: application/json
-
-### Check if bundle key exists
-GET {{baseUrl}}/bundles/key-exists/carbon_footprint
-Accept: application/json
 
 ### Create new bundle
 POST {{baseUrl}}/bundles
@@ -77,25 +53,6 @@ Accept: application/json
 # TENANT ENDPOINTS
 ###############################################################################
 
-### Get all tenants (with pagination)
-GET {{baseUrl}}/tenants
-Accept: application/json
-
-### Get tenants with search and filters
-GET {{baseUrl}}/tenants?page=1&pageSize=10&search=acme&isActive=true&sortBy=name
-Accept: application/json
-
-### Get tenants with specific filters
-GET {{baseUrl}}/tenants?name=demo&email=demo&isActive=true
-Accept: application/json
-
-### Get tenant by ID
-GET {{baseUrl}}/tenants/{{tenantId}}
-Accept: application/json
-
-### Get tenant by email
-GET {{baseUrl}}/tenants/email/demo@central.com
-Accept: application/json
 
 ### Create new tenant (with domains)
 POST {{baseUrl}}/tenants
@@ -151,30 +108,6 @@ Accept: application/json
 # TENANT DOMAIN ENDPOINTS
 ###############################################################################
 
-### Get all tenant domains (with pagination)
-GET {{baseUrl}}/tenant-domains
-Accept: application/json
-
-### Get domains with search
-GET {{baseUrl}}/tenant-domains?page=1&pageSize=10&search=acme&sortBy=name
-Accept: application/json
-
-### Get tenant domain by ID
-GET {{baseUrl}}/tenant-domains/{{domainId}}
-Accept: application/json
-
-### Get tenant domain by name
-GET {{baseUrl}}/tenant-domains/name/acme-main
-Accept: application/json
-
-### Get domains by tenant ID
-GET {{baseUrl}}/tenant-domains/tenant/{{tenantId}}
-Accept: application/json
-
-### Check if domain name exists
-GET {{baseUrl}}/tenant-domains/name-exists/acme-main
-Accept: application/json
-
 ### Create new tenant domain
 POST {{baseUrl}}/tenant-domains
 Content-Type: application/json
@@ -201,38 +134,6 @@ Accept: application/json
 ###############################################################################
 # TENANT SUBSCRIPTION ENDPOINTS
 ###############################################################################
-
-### Get all tenant subscriptions (with pagination)
-GET {{baseUrl}}/tenant-subscriptions
-Accept: application/json
-
-### Get subscriptions with search and sorting
-GET {{baseUrl}}/tenant-subscriptions?page=1&pageSize=10&search=12&sortBy=startDate&sortDescending=true
-Accept: application/json
-
-### Get tenant subscription by ID
-GET {{baseUrl}}/tenant-subscriptions/{{subscriptionId}}
-Accept: application/json
-
-### Get subscriptions by tenant ID
-GET {{baseUrl}}/tenant-subscriptions/tenant/{{tenantId}}
-Accept: application/json
-
-### Get subscriptions by bundle ID
-GET {{baseUrl}}/tenant-subscriptions/bundle/{{bundleId}}
-Accept: application/json
-
-### Get all active subscriptions
-GET {{baseUrl}}/tenant-subscriptions/active
-Accept: application/json
-
-### Check if tenant has active subscription for bundle
-GET {{baseUrl}}/tenant-subscriptions/check-active/{{tenantId}}/{{bundleId}}
-Accept: application/json
-
-### Check if specific subscription is active
-GET {{baseUrl}}/tenant-subscriptions/{{subscriptionId}}/is-active
-Accept: application/json
 
 ### Create new tenant subscription (12 months)
 POST {{baseUrl}}/tenant-subscriptions
@@ -272,42 +173,11 @@ Content-Type: application/json
 DELETE {{baseUrl}}/tenant-subscriptions/{{subscriptionId}}
 Accept: application/json
 
-###############################################################################
-# TESTING SCENARIOS
-###############################################################################
-
-### Scenario 1: Create complete tenant with subscription
-# Step 1: Create tenant
-POST {{baseUrl}}/tenants
-Content-Type: application/json
-
-{
-  "name": "Test Company",
-  "email": "test@testcompany.com",
-  "domainNames": ["testcompany-main"]
-}
-
-### Step 2: Get bundle ID for subscription (copy ID from response)
-GET {{baseUrl}}/bundles/key/carbon_footprint
-
-### Step 3: Create subscription (replace IDs with actual values)
-POST {{baseUrl}}/tenant-subscriptions
-Content-Type: application/json
-
-{
-  "tenantId": "REPLACE_WITH_TENANT_ID",
-  "bundleId": "REPLACE_WITH_BUNDLE_ID",
-  "duration": 12,
-  "startDate": "2024-01-01T00:00:00Z"
-}
 
 ###############################################################################
 # ERROR TESTING
 ###############################################################################
 
-### Test 404 - Non-existent bundle
-GET {{baseUrl}}/bundles/99999999-9999-9999-9999-999999999999
-Accept: application/json
 
 ### Test 400 - Invalid bundle creation
 POST {{baseUrl}}/bundles
@@ -337,15 +207,3 @@ Content-Type: application/json
   "key": "carbon_footprint",
   "description": "This should fail due to duplicate key"
 }
-
-###############################################################################
-# PERFORMANCE TESTING
-###############################################################################
-
-### Large page size test
-GET {{baseUrl}}/bundles?pageSize=100
-Accept: application/json
-
-### Complex search test
-GET {{baseUrl}}/tenants?search=test&sortBy=name&sortDescending=true&page=1&pageSize=50
-Accept: application/json

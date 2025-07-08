@@ -1,14 +1,14 @@
 ﻿namespace Central.Application.DTOs;
 
 public record BundleDto(
-    Guid Id,
-    DateTime? CreatedAt,
-    DateTime? UpdatedAt,
-    Guid? CreatedBy,
-    Guid? UpdatedBy,
-    string Name,
-    string Key,
-    string? Description
+    Guid Id = default,
+    DateTime? CreatedAt = null,
+    DateTime? UpdatedAt = null,
+    Guid? CreatedBy = null,
+    Guid? UpdatedBy = null,
+    string Name = "",
+    string Key = "",
+    string? Description = null
 ) : BaseDto(Id, CreatedAt, UpdatedAt, CreatedBy, UpdatedBy);
 
 public record CreateBundleRequest(

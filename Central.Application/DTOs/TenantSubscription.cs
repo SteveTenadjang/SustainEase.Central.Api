@@ -1,21 +1,20 @@
 ﻿namespace Central.Application.DTOs;
 
 public record TenantSubscriptionDto(
-    Guid Id,
-    DateTime? CreatedAt,
-    DateTime? UpdatedAt,
-    Guid? CreatedBy,
-    Guid? UpdatedBy,
-    Guid TenantId,
-    Guid BundleId,
-    int Duration,
-    DateTime StartDate,
-    DateTime EndDate,
-    bool IsActive,
+    Guid Id = default,
+    DateTime? CreatedAt = null,
+    DateTime? UpdatedAt = null,
+    Guid? CreatedBy = null,
+    Guid? UpdatedBy = null,
+    Guid TenantId = default,
+    Guid BundleId = default,
+    int Duration = 0,
+    DateTime StartDate = default,
+    DateTime EndDate = default,
+    bool IsActive = false,
     string? TenantName = null,
     string? BundleName = null
 ) : BaseDto(Id, CreatedAt, UpdatedAt, CreatedBy, UpdatedBy);
-
 
 public record CreateTenantSubscriptionRequest(
     Guid TenantId,

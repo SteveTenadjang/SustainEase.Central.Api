@@ -29,7 +29,7 @@ public class TenantRepository(CentralDbContext context) : GenericRepository<Tena
     {
         return await DbSet
             .Include(t => t.Domains)
-            .Include(t => t)
+            .Include(t => t.Subscriptions)
             .FirstOrDefaultAsync(t => t.Email == email);
     }
         

@@ -17,7 +17,7 @@ public class TenantSubscriptionService(
         UpdateTenantSubscriptionRequest, PaginatedRequest>(tenantSubscriptionRepository, mapper, createValidator,
         updateValidator), ITenantSubscriptionService
 {
-    protected override Guid GetEntityIdFromRequest(UpdateTenantSubscriptionRequest request) 
+    protected override Guid GetEntityIdFromRequest(UpdateTenantSubscriptionRequest request)
         => request.Id;
 
     public async Task<Result<List<TenantSubscriptionDto>>> GetByTenantIdAsync(Guid tenantId)
@@ -27,25 +27,29 @@ public class TenantSubscriptionService(
 
         var subscriptions = await Repository.FindAsync(s => s.TenantId == tenantId);
         var subscriptionDtos = Mapper.Map<List<TenantSubscriptionDto>>(subscriptions);
-        
+
         // Calculate derived properties
         var enhancedDtos = subscriptionDtos.Select(dto =>
         {
             var subscription = subscriptions.First(s => s.Id == dto.Id);
-            return dto with 
+            return dto with
             {
-                EndDate = subscription.StartDate.AddMonths(subscription.Duration),
+                EndDate = subscription.StartDate.AddDays(subscription.Duration),
                 IsActive = IsSubscriptionCurrentlyActive(subscription.StartDate, subscription.Duration)
             };
         }).ToList();
-        
+
         return Result<List<TenantSubscriptionDto>>.Success(enhancedDtos);
     }
 
     public async Task<Result<List<TenantSubscriptionDto>>> GetActiveSubscriptionsAsync()
     {
         var allSubscriptions = await tenantSubscriptionRepository.GetActiveSubscriptionsAsync();
-        var activeDtos = (from subscription in allSubscriptions where IsSubscriptionCurrentlyActive(subscription.StartDate, subscription.Duration) let dto = Mapper.Map<TenantSubscriptionDto>(subscription) select dto with { EndDate = subscription.StartDate.AddMonths(subscription.Duration), IsActive = true }).ToList();
+        var activeDtos = (from subscription in allSubscriptions
+                where IsSubscriptionCurrentlyActive(subscription.StartDate, subscription.Duration)
+                let dto = Mapper.Map<TenantSubscriptionDto>(subscription)
+                select dto with { EndDate = subscription.StartDate.AddDays(subscription.Duration), IsActive = true })
+            .ToList();
 
         return Result<List<TenantSubscriptionDto>>.Success(activeDtos);
     }
@@ -57,35 +61,34 @@ public class TenantSubscriptionService(
 
         var subscriptions = await Repository.FindAsync(s => s.BundleId == bundleId);
         var subscriptionDtos = Mapper.Map<List<TenantSubscriptionDto>>(subscriptions);
-        
+
         // Calculate derived properties
         var enhancedDtos = subscriptionDtos.Select(dto =>
         {
             var subscription = subscriptions.First(s => s.Id == dto.Id);
-            return dto with 
+            return dto with
             {
-                EndDate = subscription.StartDate.AddMonths(subscription.Duration),
+                EndDate = subscription.StartDate.AddDays(subscription.Duration),
                 IsActive = IsSubscriptionCurrentlyActive(subscription.StartDate, subscription.Duration)
             };
         }).ToList();
 
         return Result<List<TenantSubscriptionDto>>.Success(enhancedDtos);
-        
     }
 
     public async Task<Result<bool>> HasActiveSubscriptionAsync(Guid tenantId, Guid bundleId)
     {
         if (tenantId == Guid.Empty)
             return Result<bool>.Failure("Tenant ID cannot be empty.");
-        
+
         if (bundleId == Guid.Empty)
             return Result<bool>.Failure("Bundle ID cannot be empty.");
 
-        var subscriptions = await Repository.FindAsync(s => 
-            s.TenantId == tenantId && 
+        var subscriptions = await Repository.FindAsync(s =>
+            s.TenantId == tenantId &&
             s.BundleId == bundleId);
 
-        var hasActiveSubscription = subscriptions.Any(s => 
+        var hasActiveSubscription = subscriptions.Any(s =>
             IsSubscriptionCurrentlyActive(s.StartDate, s.Duration));
 
         return Result<bool>.Success(hasActiveSubscription);
@@ -110,18 +113,18 @@ public class TenantSubscriptionService(
         var result = await base.CreateAsync(request);
 
         if (!result.IsSuccess || result.Data == null) return result;
-        
+
         // Calculate derived properties for the response
         var dto = result.Data;
-        var endDate = request.StartDate.AddMonths(request.Duration);
+        var endDate = request.StartDate.AddDays(request.Duration);
         var isActive = IsSubscriptionCurrentlyActive(request.StartDate, request.Duration);
-            
-        var enhancedDto = dto with 
+
+        var enhancedDto = dto with
         {
             EndDate = endDate,
             IsActive = isActive
         };
-            
+
         return Result<TenantSubscriptionDto>.Success(enhancedDto);
     }
 
@@ -129,7 +132,7 @@ public class TenantSubscriptionService(
     {
         var entities = await Repository.GetAllAsync();
         var query = entities.AsQueryable();
-        
+
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -144,21 +147,21 @@ public class TenantSubscriptionService(
         {
             query = request.SortBy.ToLower() switch
             {
-                "startdate" => request.SortDescending ? 
-                    query.OrderByDescending(s => s.StartDate) : 
-                    query.OrderBy(s => s.StartDate),
-                "duration" => request.SortDescending ? 
-                    query.OrderByDescending(s => s.Duration) : 
-                    query.OrderBy(s => s.Duration),
-                "tenantid" => request.SortDescending ? 
-                    query.OrderByDescending(s => s.TenantId) : 
-                    query.OrderBy(s => s.TenantId),
-                "bundleid" => request.SortDescending ? 
-                    query.OrderByDescending(s => s.BundleId) : 
-                    query.OrderBy(s => s.BundleId),
-                "createdat" => request.SortDescending ? 
-                    query.OrderByDescending(s => s.CreatedAt) : 
-                    query.OrderBy(s => s.CreatedAt),
+                "startdate" => request.SortDescending
+                    ? query.OrderByDescending(s => s.StartDate)
+                    : query.OrderBy(s => s.StartDate),
+                "duration" => request.SortDescending
+                    ? query.OrderByDescending(s => s.Duration)
+                    : query.OrderBy(s => s.Duration),
+                "tenantid" => request.SortDescending
+                    ? query.OrderByDescending(s => s.TenantId)
+                    : query.OrderBy(s => s.TenantId),
+                "bundleid" => request.SortDescending
+                    ? query.OrderByDescending(s => s.BundleId)
+                    : query.OrderBy(s => s.BundleId),
+                "createdat" => request.SortDescending
+                    ? query.OrderByDescending(s => s.CreatedAt)
+                    : query.OrderBy(s => s.CreatedAt),
                 _ => query.OrderByDescending(s => s.StartDate)
             };
         }
@@ -172,18 +175,18 @@ public class TenantSubscriptionService(
             .ToList();
 
         var dtos = Mapper.Map<List<TenantSubscriptionDto>>(paginatedEntities);
-        
+
         // Calculate derived properties for each DTO
         var enhancedDtos = dtos.Select(dto =>
         {
             var subscription = paginatedEntities.First(s => s.Id == dto.Id);
-            return dto with 
+            return dto with
             {
-                EndDate = subscription.StartDate.AddMonths(subscription.Duration),
+                EndDate = subscription.StartDate.AddDays(subscription.Duration),
                 IsActive = IsSubscriptionCurrentlyActive(subscription.StartDate, subscription.Duration)
             };
         }).ToList();
-        
+
         var response = new PaginatedResponse<TenantSubscriptionDto>(
             enhancedDtos,
             totalCount,
@@ -197,7 +200,7 @@ public class TenantSubscriptionService(
     // Helper method to determine if a subscription is currently active
     private static bool IsSubscriptionCurrentlyActive(DateTime startDate, int duration)
     {
-        var endDate = startDate.AddMonths(duration);
+        var endDate = startDate.AddDays(duration);
         var currentDate = DateTime.UtcNow;
         return currentDate >= startDate && currentDate <= endDate;
     }

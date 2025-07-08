@@ -1,0 +1,144 @@
+﻿# SustainEase Central API HTTP Client Tests
+# This file contains HTTP GET requests for testing all API GET endpoints
+
+@baseUrl = {{host}}/api
+
+###############################################################################
+# BUNDLE ENDPOINTS
+###############################################################################
+
+### Get all bundles (with pagination)
+GET {{baseUrl}}/bundles
+# @name bundles
+Accept: application/json
+
+### Get bundles with search and pagination
+GET {{baseUrl}}/bundles?page=1&pageSize=5&search=carbon&sortBy=name&sortDescending=false
+Accept: application/json
+
+### Get bundles with filters
+GET {{baseUrl}}/bundles?name=carbon&key=carbon_footprint
+Accept: application/json
+
+### Get bundle by ID
+GET {{baseUrl}}/bundles/{{$random.uuid}}
+Accept: application/json
+
+### Get bundle by key
+GET {{baseUrl}}/bundles/key/carbon_footprint
+Accept: application/json
+
+### Check if bundle key exists
+GET {{baseUrl}}/bundles/key-exists/carbon_footprint
+Accept: application/json
+
+
+###############################################################################
+# TENANT ENDPOINTS
+###############################################################################
+
+### Get all tenants (with pagination)
+GET {{baseUrl}}/tenants
+Accept: application/json
+
+### Get tenants with search and filters
+GET {{baseUrl}}/tenants?page=1&pageSize=10&search=acme&isActive=true&sortBy=name
+Accept: application/json
+
+### Get tenants with specific filters
+GET {{baseUrl}}/tenants?name=demo&email=demo&isActive=true
+Accept: application/json
+
+### Get tenant by ID
+GET {{baseUrl}}/tenants/{{$random.uuid}}
+Accept: application/json
+
+### Get tenant by email
+GET {{baseUrl}}/tenants/email/demo@central.com
+Accept: application/json
+
+
+###############################################################################
+# TENANT DOMAIN ENDPOINTS
+###############################################################################
+
+### Get all tenant domains (with pagination)
+GET {{baseUrl}}/tenant-domains
+Accept: application/json
+
+### Get domains with search
+GET {{baseUrl}}/tenant-domains?page=1&pageSize=10&search=acme&sortBy=name
+Accept: application/json
+
+### Get tenant domain by ID
+GET {{baseUrl}}/tenant-domains/{{$random.uuid}}
+Accept: application/json
+
+### Get tenant domain by name
+GET {{baseUrl}}/tenant-domains/name/acme-main
+Accept: application/json
+
+### Get domains by tenant ID
+GET {{baseUrl}}/tenant-domains/tenant/{{$random.uuid}}
+Accept: application/json
+
+### Check if domain name exists
+GET {{baseUrl}}/tenant-domains/name-exists/acme-main
+Accept: application/json
+
+###############################################################################
+# TENANT SUBSCRIPTION ENDPOINTS
+###############################################################################
+
+### Get all tenant subscriptions (with pagination)
+GET {{baseUrl}}/tenant-subscriptions
+Accept: application/json
+
+### Get subscriptions with search and sorting
+GET {{baseUrl}}/tenant-subscriptions?page=1&pageSize=10&search=12&sortBy=startDate&sortDescending=true
+Accept: application/json
+
+### Get tenant subscription by ID
+GET {{baseUrl}}/tenant-subscriptions/{{$random.uuid}}
+Accept: application/json
+
+### Get subscriptions by tenant ID
+GET {{baseUrl}}/tenant-subscriptions/tenant/{{$random.uuid}}
+Accept: application/json
+
+### Get subscriptions by bundle ID
+GET {{baseUrl}}/tenant-subscriptions/bundle/{{$random.uuid}}
+Accept: application/json
+
+### Get all active subscriptions
+GET {{baseUrl}}/tenant-subscriptions/active
+Accept: application/json
+
+### Check if tenant has active subscription for bundle
+GET {{baseUrl}}/tenant-subscriptions/check-active/{{$random.uuid}}/{{$random.uuid}}
+Accept: application/json
+
+### Check if specific subscription is active
+GET {{baseUrl}}/tenant-subscriptions/{{$random.uuid}}/is-active
+Accept: application/json
+
+###############################################################################
+# ERROR TESTING
+###############################################################################
+
+### Test 404 - Non-existent bundle
+GET {{baseUrl}}/bundles/{{$random.uuid}}
+Accept: application/json
+
+
+###############################################################################
+# PERFORMANCE TESTING
+###############################################################################
+
+### Large page size test
+GET {{baseUrl}}/bundles?pageSize=100
+Accept: application/json
+
+### Complex search test
+GET {{baseUrl}}/tenants?search=test&sortBy=name&sortDescending=true&page=1&pageSize=50
+Accept: application/json

@@ -1,11 +1,11 @@
 ﻿namespace Central.Application.DTOs;
 
 public abstract record BaseDto(
-    Guid Id,
-    DateTime? CreatedAt,
-    DateTime? UpdatedAt,
-    Guid? CreatedBy,
-    Guid? UpdatedBy
+    Guid Id = default,
+    DateTime? CreatedAt = null,
+    DateTime? UpdatedAt = null,
+    Guid? CreatedBy = null,
+    Guid? UpdatedBy = null
 );
 
 public record PaginatedRequest(

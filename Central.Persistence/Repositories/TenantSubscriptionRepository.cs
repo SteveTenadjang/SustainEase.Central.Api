@@ -30,7 +30,7 @@ public class TenantSubscriptionRepository(CentralDbContext context)
         return await DbSet
             .Include(ts => ts.Tenant)
             .Include(ts => ts.Bundle)
-            .Where(ts => ts.StartDate.AddDays(ts.Duration) >= DateTime.Now)
+            .Where(ts => ts.StartDate.AddDays(ts.Duration) >= DateTime.UtcNow)
             .OrderByDescending(ts => ts.CreatedAt)
             .ToListAsync();
     }

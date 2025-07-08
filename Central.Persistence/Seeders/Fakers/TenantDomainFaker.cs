@@ -9,7 +9,7 @@ public static class TenantDomainFaker
 {
     public static async Task FakerAsync(CentralDbContext dbContext)
     {
-        if (await dbContext.Domains.AnyAsync()) return;
+        if (dbContext.Domains.Any()) return;
 
         var tenants = await dbContext.Tenants.ToListAsync();
         var domains = new List<TenantDomain>();

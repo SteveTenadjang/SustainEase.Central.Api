@@ -23,19 +23,7 @@ public class TenantConfiguration : BaseEntityConfiguration<Tenant>
         
         builder.Property(t => t.IsActive)
             .HasConversion<bool>();
-
-        builder.Property(t => t.PhoneNumber)
-            .HasMaxLength(11);
-                
-        builder.Property(t => t.LogoUrl)
-            .HasMaxLength(200);
-                
-        builder.Property(t => t.PrimaryColor)
-            .HasMaxLength(7);
-                
-        builder.Property(t => t.SecondaryColor)
-            .HasMaxLength(7);
-
+        
         builder.Property(t => t.ConnectionString)
             .HasMaxLength(500);
 
@@ -48,6 +36,5 @@ public class TenantConfiguration : BaseEntityConfiguration<Tenant>
             .WithOne(bs => bs.Tenant)
             .HasForeignKey(bs => bs.TenantId)
             .OnDelete(DeleteBehavior.Cascade);
-
     }
 }

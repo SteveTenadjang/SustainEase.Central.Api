@@ -2,6 +2,7 @@
 using Central.Application.Events;
 using Central.Application.Services;
 using Central.Domain.Events.Tenant;
+using Central.Application.Mappings;
 using Central.Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Central.Application.Events.Handlers.Tenant;
@@ -13,8 +14,14 @@ public static class ServiceCollectionExtensions
     public static void AddApplication(this IServiceCollection services)
     {
         // Add AutoMapper
-        services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
-
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<BundleProfile>();
+            cfg.AddProfile<TenantProfile>();
+            cfg.AddProfile<TenantDomainProfile>();
+            cfg.AddProfile<TenantSubscriptionProfile>();
+        });
+        
         // Add FluentValidation
         services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
         ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;

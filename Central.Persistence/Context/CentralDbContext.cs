@@ -20,7 +20,6 @@ public class CentralDbContext(DbContextOptions<CentralDbContext> options) : DbCo
         modelBuilder.Entity<TenantDomain>().HasQueryFilter(e => e.DeletedAt == null);
         modelBuilder.Entity<TenantSubscription>().HasQueryFilter(e => e.DeletedAt == null);
         
-        base.OnModelCreating(modelBuilder);
     }
     
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

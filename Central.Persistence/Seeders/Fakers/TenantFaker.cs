@@ -1,7 +1,6 @@
 ﻿using Bogus;
 using Central.Domain.Entities;
 using Central.Persistence.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace Central.Persistence.Seeders.Fakers;
 
@@ -9,7 +8,7 @@ public static class TenantFaker
 {
     public static async Task FakerAsync(CentralDbContext dbContext)
     {
-        if (await dbContext.Tenants.AnyAsync()) return;
+        if (dbContext.Tenants.Any()) return;
 
         var tenantFaker = new Faker<Tenant>()
             .RuleFor(t => t.Id, f => Guid.NewGuid())

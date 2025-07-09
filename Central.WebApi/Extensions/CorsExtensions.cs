@@ -27,8 +27,8 @@ public static class CorsExtensions
 
     public static WebApplication UseApiCors(this WebApplication app)
     {
-        app.UseCors(app.Environment.IsDevelopment() 
-            ? "DefaultPolicy" 
+        app.UseCors(app.Environment.IsDevelopment()
+            ? "DefaultPolicy"
             : "ProductionPolicy"
         );
         return app;

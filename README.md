@@ -1,6 +1,7 @@
 # Central - Multi-Tenant SaaS Management Platform
 
-A comprehensive .NET 8 application for managing multi-tenant SaaS environments with bundles, tenants, domains, and subscriptions.
+A comprehensive .NET 8 application for managing multi-tenant SaaS environments with bundles, tenants, domains, and
+subscriptions.
 
 ## 🏗️ Architecture
 
@@ -24,12 +25,14 @@ Central/
 ## 🚀 Features
 
 ### Core Functionality
+
 - **Bundle Management**: Create and manage feature bundles
 - **Tenant Management**: Multi-tenant support with domain isolation
 - **Domain Management**: Tenant-specific domain configuration
 - **Subscription Management**: Tenant subscriptions to bundles with lifecycle tracking
 
 ### Technical Features
+
 - **Clean Architecture**: Well-structured, testable, and maintainable code
 - **Result Pattern**: Consistent error handling without exceptions
 - **Event-Driven**: Domain events for decoupled business logic
@@ -42,6 +45,7 @@ Central/
 ## 🛠️ Technology Stack
 
 ### Backend
+
 - **.NET 8**: Latest .NET framework
 - **ASP.NET Core**: Web API framework
 - **Entity Framework Core**: ORM with PostgreSQL
@@ -50,10 +54,12 @@ Central/
 - **AutoMapper**: Object-to-object mapping
 
 ### Database
+
 - **PostgreSQL**: Primary database
 - **Entity Framework Core**: Database access and migrations
 
 ### Documentation & Testing
+
 - **Swagger/OpenAPI**: API documentation
 - **Swashbuckle**: Swagger generation for .NET
 
@@ -61,17 +67,20 @@ Central/
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [PostgreSQL 15+](https://www.postgresql.org/download/)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) or [JetBrains Rider](https://www.jetbrains.com/rider/) (recommended)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) or [JetBrains Rider](https://www.jetbrains.com/rider/) (
+  recommended)
 
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/yourorg/central.git
 cd central
 ```
 
 ### 2. Database Setup
+
 ```bash
 # Update connection string in appsettings.json
 # Create database and run migrations
@@ -79,12 +88,14 @@ dotnet ef database update --project Central.Persistence --startup-project Centra
 ```
 
 ### 3. Run the Application
+
 ```bash
 cd Central.WebApi
 dotnet run
 ```
 
 The API will be available at:
+
 - **HTTP**: `http://localhost:5000`
 - **HTTPS**: `https://localhost:5001`
 - **Swagger UI**: `http://localhost:5000` (development only)
@@ -92,6 +103,7 @@ The API will be available at:
 ## 📚 API Documentation
 
 ### Base URL
+
 ```
 https://localhost:5001/api
 ```
@@ -99,6 +111,7 @@ https://localhost:5001/api
 ### Available Endpoints
 
 #### Bundles
+
 ```http
 GET    /api/bundles                    # Get paginated bundles
 GET    /api/bundles/{id}               # Get bundle by ID
@@ -110,6 +123,7 @@ GET    /api/bundles/key-exists/{key}   # Check if key exists
 ```
 
 #### Tenants
+
 ```http
 GET    /api/tenants                    # Get paginated tenants
 GET    /api/tenants/{id}               # Get tenant by ID
@@ -122,6 +136,7 @@ POST   /api/tenants/{id}/deactivate    # Deactivate tenant
 ```
 
 #### Tenant Domains
+
 ```http
 GET    /api/tenant-domains                     # Get paginated domains
 GET    /api/tenant-domains/{id}                # Get domain by ID
@@ -133,6 +148,7 @@ DELETE /api/tenant-domains/{id}                # Delete domain
 ```
 
 #### Tenant Subscriptions
+
 ```http
 GET    /api/tenant-subscriptions                              # Get paginated subscriptions
 GET    /api/tenant-subscriptions/{id}                         # Get subscription by ID
@@ -148,6 +164,7 @@ GET    /api/tenant-subscriptions/check-active/{tenantId}/{bundleId}  # Check act
 ### Query Parameters
 
 Most list endpoints support these query parameters:
+
 - `page`: Page number (default: 1)
 - `pageSize`: Items per page (default: 10, max: 100)
 - `search`: Search term
@@ -155,6 +172,7 @@ Most list endpoints support these query parameters:
 - `sortDescending`: Sort direction (default: false)
 
 **Example:**
+
 ```http
 GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=false
 ```
@@ -162,6 +180,7 @@ GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=fal
 ## 📊 Data Models
 
 ### Bundle
+
 ```json
 {
   "id": "guid",
@@ -174,6 +193,7 @@ GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=fal
 ```
 
 ### Tenant
+
 ```json
 {
   "id": "guid",
@@ -190,6 +210,7 @@ GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=fal
 ```
 
 ### Tenant Domain
+
 ```json
 {
   "id": "guid",
@@ -200,6 +221,7 @@ GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=fal
 ```
 
 ### Tenant Subscription
+
 ```json
 {
   "id": "guid",
@@ -217,6 +239,7 @@ GET /api/bundles?page=1&pageSize=20&search=carbon&sortBy=name&sortDescending=fal
 ## 🧪 Testing
 
 ### Running Tests
+
 ```bash
 # Run all tests
 dotnet test
@@ -226,7 +249,10 @@ dotnet test --collect:"XPlat Code Coverage"
 ```
 
 ### API Testing
-Use the included Swagger UI at `http://localhost:5000` for interactive API testing, or import the OpenAPI specification into:
+
+Use the included Swagger UI at `http://localhost:5000` for interactive API testing, or import the OpenAPI specification
+into:
+
 - [Postman](https://www.postman.com/)
 - [Insomnia](https://insomnia.rest/)
 - [Thunder Client](https://www.thunderclient.com/) (VS Code)
@@ -234,7 +260,9 @@ Use the included Swagger UI at `http://localhost:5000` for interactive API testi
 ## 🔧 Configuration
 
 ### Connection Strings
+
 Update `appsettings.json`:
+
 ```json
 {
   "ConnectionStrings": {
@@ -244,6 +272,7 @@ Update `appsettings.json`:
 ```
 
 ### Environment Variables
+
 - `ASPNETCORE_ENVIRONMENT`: Set to `Development`, `Staging`, or `Production`
 - `ConnectionStrings__DefaultConnection`: Database connection string
 
@@ -286,7 +315,9 @@ Central/
 The application uses domain events for decoupled business logic:
 
 ### TenantCreatedEvent
+
 Triggered when a new tenant is created. Handlers can:
+
 - Send welcome emails
 - Create audit logs
 - Initialize tenant resources
@@ -304,6 +335,7 @@ Triggered when a new tenant is created. Handlers can:
 ## 🚀 Deployment
 
 ### Docker Support
+
 ```dockerfile
 # Build and run with Docker
 docker build -t central-api .
@@ -311,6 +343,7 @@ docker run -p 5000:80 central-api
 ```
 
 ### Production Considerations
+
 - Use production database
 - Configure proper logging
 - Set up monitoring
@@ -333,6 +366,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 For support and questions:
+
 - Create an [issue](https://github.com/yourorg/central/issues)
 - Email: support@central.com
 - Documentation: [Wiki](https://github.com/yourorg/central/wiki)

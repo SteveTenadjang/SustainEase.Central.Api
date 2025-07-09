@@ -16,7 +16,7 @@ public class DatabaseSeeder(CentralDbContext context)
     public async Task RunFakersAsync()
     {
         await context.Database.EnsureCreatedAsync();
-        
+
         // Then run fakers (dynamic/test data)
         await TenantDomainFaker.FakerAsync(context);
         await TenantFaker.FakerAsync(context);

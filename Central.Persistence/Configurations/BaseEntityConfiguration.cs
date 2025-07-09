@@ -10,7 +10,7 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
     {
         // Primary key
         builder.HasKey(x => x.Id);
-        
+
         builder.Property(x => x.CreatedBy);
         builder.Property(x => x.UpdatedBy);
         builder.Property(x => x.DeletedBy);

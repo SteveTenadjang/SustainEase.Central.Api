@@ -1,4 +1,5 @@
-﻿using Central.WebApi.Middleware;
+﻿using System.Text.Json;
+using Central.WebApi.Middleware;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 
@@ -31,7 +32,7 @@ public static class ServiceCollectionExtensions
         // Add JSON options
         services.ConfigureHttpJsonOptions(options =>
         {
-            options.SerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+            options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             options.SerializerOptions.WriteIndented = true;
         });
     }

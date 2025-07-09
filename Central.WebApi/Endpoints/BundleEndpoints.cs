@@ -20,7 +20,7 @@ public static class BundleEndpoints
             .WithName("GetAllBundles")
             .WithSummary("Get all bundles with pagination")
             .WithDescription("Retrieve a paginated list of bundles with optional filtering and sorting")
-            .Produces<PaginatedResponse<BundleDto>>(200)
+            .Produces<PaginatedResponse<BundleDto>>()
             .Produces<ApiErrorResponse>(400);
 
         // GET /api/bundles/{id}
@@ -28,7 +28,7 @@ public static class BundleEndpoints
             .WithName("GetBundleById")
             .WithSummary("Get bundle by ID")
             .WithDescription("Retrieve a specific bundle by its unique identifier")
-            .Produces<BundleDto>(200)
+            .Produces<BundleDto>()
             .Produces<ApiErrorResponse>(404);
 
         // GET /api/bundles/key/{key}
@@ -36,7 +36,7 @@ public static class BundleEndpoints
             .WithName("GetBundleByKey")
             .WithSummary("Get bundle by key")
             .WithDescription("Retrieve a specific bundle by its unique key")
-            .Produces<BundleDto>(200)
+            .Produces<BundleDto>()
             .Produces<ApiErrorResponse>(404);
 
         // POST /api/bundles
@@ -54,7 +54,7 @@ public static class BundleEndpoints
             .WithSummary("Update an existing bundle")
             .WithDescription("Update an existing bundle with the provided information")
             .AddEndpointFilter<ValidationFilter<UpdateBundleRequest>>()
-            .Produces<BundleDto>(200)
+            .Produces<BundleDto>()
             .Produces<ApiErrorResponse>(404)
             .Produces<ValidationErrorResponse>(400);
 
@@ -71,7 +71,7 @@ public static class BundleEndpoints
             .WithName("CheckBundleKeyExists")
             .WithSummary("Check if bundle key exists")
             .WithDescription("Check if a bundle key is already in use")
-            .Produces<bool>(200);
+            .Produces<bool>();
 
         return group;
     }

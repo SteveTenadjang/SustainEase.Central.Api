@@ -13,7 +13,7 @@ public class TenantDomainConfiguration : BaseEntityConfiguration<TenantDomain>
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(100);
-        
+
         builder.HasOne(td => td.Tenant)
             .WithMany(t => t.Domains)
             .HasForeignKey(td => td.TenantId)

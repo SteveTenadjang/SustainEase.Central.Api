@@ -1,5 +1,4 @@
-﻿
-using Central.Domain.Entities;
+﻿using Central.Domain.Entities;
 using Central.Domain.Interfaces;
 using Central.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +13,13 @@ public class BundleRepository(CentralDbContext context) : GenericRepository<Bund
             .OrderBy(b => b.Name)
             .ToListAsync();
     }
-        
+
     public async Task<Bundle?> GetByKeyAsync(string key)
     {
         return await DbSet
             .FirstOrDefaultAsync(b => b.Key == key);
     }
-        
+
     public async Task<bool> KeyExistsAsync(string key)
     {
         return await DbSet

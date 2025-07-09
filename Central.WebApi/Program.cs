@@ -1,6 +1,6 @@
+using Central.Application.Extensions;
 using Central.Persistence.Extensions;
 using Central.Persistence.Seeders;
-using Central.Application.Extensions;
 using Central.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -20,6 +20,6 @@ public static class EndpointExtensions
             .WithName("HealthCheck")
             .WithTags("Health")
             .WithSummary("Health check endpoint")
-            .Produces<object>(200);
+            .Produces<object>();
     }
 }

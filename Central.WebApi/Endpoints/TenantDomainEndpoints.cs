@@ -20,14 +20,14 @@ public static class TenantDomainEndpoints
             .WithName("GetAllTenantDomains")
             .WithSummary("Get all tenant domains with pagination")
             .WithDescription("Retrieve a paginated list of tenant domains with optional filtering and sorting")
-            .Produces<PaginatedResponse<TenantDomainDto>>(200);
+            .Produces<PaginatedResponse<TenantDomainDto>>();
 
         // GET /api/tenant-domains/{id}
         domainGroup.MapGet("/{id:guid}", GetDomainById)
             .WithName("GetTenantDomainById")
             .WithSummary("Get tenant domain by ID")
             .WithDescription("Retrieve a specific tenant domain by its unique identifier")
-            .Produces<TenantDomainDto>(200)
+            .Produces<TenantDomainDto>()
             .Produces<ApiErrorResponse>(404);
 
         // GET /api/tenant-domains/name/{name}
@@ -35,7 +35,7 @@ public static class TenantDomainEndpoints
             .WithName("GetTenantDomainByName")
             .WithSummary("Get tenant domain by name")
             .WithDescription("Retrieve a specific tenant domain by its name")
-            .Produces<TenantDomainDto>(200)
+            .Produces<TenantDomainDto>()
             .Produces<ApiErrorResponse>(404);
 
         // GET /api/tenant-domains/tenant/{tenantId}
@@ -43,7 +43,7 @@ public static class TenantDomainEndpoints
             .WithName("GetDomainsByTenantId")
             .WithSummary("Get domains by tenant ID")
             .WithDescription("Retrieve all domains associated with a specific tenant")
-            .Produces<List<TenantDomainDto>>(200);
+            .Produces<List<TenantDomainDto>>();
 
         // POST /api/tenant-domains
         domainGroup.MapPost("/", CreateDomain)
@@ -60,7 +60,7 @@ public static class TenantDomainEndpoints
             .WithSummary("Update an existing tenant domain")
             .WithDescription("Update an existing tenant domain with the provided information")
             .AddEndpointFilter<ValidationFilter<CreateTenantDomainRequest>>()
-            .Produces<TenantDomainDto>(200)
+            .Produces<TenantDomainDto>()
             .Produces<ApiErrorResponse>(404)
             .Produces<ValidationErrorResponse>(400);
 
@@ -77,7 +77,7 @@ public static class TenantDomainEndpoints
             .WithName("CheckDomainNameExists")
             .WithSummary("Check if domain name exists")
             .WithDescription("Check if a domain name is already in use")
-            .Produces<bool>(200);
+            .Produces<bool>();
 
         return group;
     }

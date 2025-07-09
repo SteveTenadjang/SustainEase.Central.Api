@@ -1,8 +1,8 @@
 ﻿using Central.Domain.Interfaces;
 using Central.Persistence.Context;
+using Central.Persistence.Repositories;
 using Central.Persistence.Seeders;
 using Microsoft.EntityFrameworkCore;
-using Central.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,14 +15,14 @@ public static class ServiceCollectionExtensions
         // Add DbContext with PostgreSQL
         services.AddDbContext<CentralDbContext>(options =>
         {
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), 
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
                 npgsqlOptions =>
                 {
                     npgsqlOptions.MigrationsAssembly(typeof(CentralDbContext).Assembly.FullName);
                     npgsqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 3,
-                        maxRetryDelay: TimeSpan.FromSeconds(30),
-                        errorCodesToAdd: null);
+                        3,
+                        TimeSpan.FromSeconds(30),
+                        null);
                 });
 
             // Enable sensitive data logging in development

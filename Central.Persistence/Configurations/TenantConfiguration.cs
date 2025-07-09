@@ -9,7 +9,7 @@ public class TenantConfiguration : BaseEntityConfiguration<Tenant>
     public override void Configure(EntityTypeBuilder<Tenant> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(100);
@@ -20,10 +20,10 @@ public class TenantConfiguration : BaseEntityConfiguration<Tenant>
 
         builder.HasIndex(b => b.Email)
             .IsUnique();
-        
+
         builder.Property(t => t.IsActive)
             .HasConversion<bool>();
-        
+
         builder.Property(t => t.ConnectionString)
             .HasMaxLength(500);
 
@@ -31,7 +31,7 @@ public class TenantConfiguration : BaseEntityConfiguration<Tenant>
             .WithOne(d => d.Tenant)
             .HasForeignKey(d => d.TenantId)
             .OnDelete(DeleteBehavior.Cascade);
-                
+
         builder.HasMany(t => t.Subscriptions)
             .WithOne(bs => bs.Tenant)
             .HasForeignKey(bs => bs.TenantId)

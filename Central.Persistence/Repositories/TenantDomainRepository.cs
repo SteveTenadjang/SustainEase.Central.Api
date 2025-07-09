@@ -14,14 +14,14 @@ public class TenantDomainRepository(CentralDbContext context)
             .Include(td => td.Tenant)
             .FirstOrDefaultAsync(td => td.Id == id);
     }
-        
+
     public async Task<TenantDomain?> GetByNameAsync(string name)
     {
         return await DbSet
             .Include(td => td.Tenant)
             .FirstOrDefaultAsync(td => td.Name == name);
     }
-        
+
     public async Task<List<TenantDomain>> GetByTenantIdAsync(Guid tenantId)
     {
         return await DbSet
@@ -29,7 +29,7 @@ public class TenantDomainRepository(CentralDbContext context)
             .OrderBy(td => td.Name)
             .ToListAsync();
     }
-        
+
     public async Task<bool> DomainExistsAsync(string name)
     {
         return await DbSet

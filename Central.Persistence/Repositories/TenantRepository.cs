@@ -15,7 +15,7 @@ public class TenantRepository(CentralDbContext context) : GenericRepository<Tena
             .ThenInclude(ts => ts.Bundle)
             .FirstOrDefaultAsync(t => t.Id == id);
     }
-        
+
     public override async Task<List<Tenant>> GetAllAsync()
     {
         return await DbSet
@@ -24,7 +24,7 @@ public class TenantRepository(CentralDbContext context) : GenericRepository<Tena
             .OrderByDescending(t => t.CreatedAt)
             .ToListAsync();
     }
-        
+
     public async Task<Tenant?> GetByEmailAsync(string email)
     {
         return await DbSet
@@ -32,7 +32,7 @@ public class TenantRepository(CentralDbContext context) : GenericRepository<Tena
             .Include(t => t.Subscriptions)
             .FirstOrDefaultAsync(t => t.Email == email);
     }
-        
+
     public async Task<Tenant?> GetByPhoneNumberAsync(string phoneNumber)
     {
         return await DbSet

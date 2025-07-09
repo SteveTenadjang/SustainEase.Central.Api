@@ -4,7 +4,8 @@ using Central.Domain.Entities;
 
 namespace Central.Application.Services.Interfaces;
 
-public interface ITenantSubscriptionService : IGenericService<TenantSubscription, TenantSubscriptionDto, CreateTenantSubscriptionRequest, UpdateTenantSubscriptionRequest, PaginatedRequest>
+public interface ITenantSubscriptionService : IGenericService<TenantSubscription, TenantSubscriptionDto,
+    CreateTenantSubscriptionRequest, UpdateTenantSubscriptionRequest, PaginatedRequest>
 {
     Task<Result<List<TenantSubscriptionDto>>> GetByTenantIdAsync(Guid tenantId);
     Task<Result<List<TenantSubscriptionDto>>> GetActiveSubscriptionsAsync();

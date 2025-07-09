@@ -13,7 +13,7 @@ public static class TenantDomainFaker
 
         var tenants = await dbContext.Tenants.ToListAsync();
         var domains = new List<TenantDomain>();
-        
+
         var domainFaker = new Faker<TenantDomain>()
             .RuleFor(td => td.Id, f => Guid.NewGuid())
             .RuleFor(td => td.Name, f => f.Internet.DomainWord())

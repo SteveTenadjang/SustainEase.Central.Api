@@ -20,14 +20,14 @@ public static class TenantSubscriptionEndpoints
             .WithName("GetAllTenantSubscriptions")
             .WithSummary("Get all tenant subscriptions with pagination")
             .WithDescription("Retrieve a paginated list of tenant subscriptions with optional filtering and sorting")
-            .Produces<PaginatedResponse<TenantSubscriptionDto>>(200);
+            .Produces<PaginatedResponse<TenantSubscriptionDto>>();
 
         // GET /api/tenant-subscriptions/{id}
         subscriptionGroup.MapGet("/{id:guid}", GetSubscriptionById)
             .WithName("GetTenantSubscriptionById")
             .WithSummary("Get tenant subscription by ID")
             .WithDescription("Retrieve a specific tenant subscription by its unique identifier")
-            .Produces<TenantSubscriptionDto>(200)
+            .Produces<TenantSubscriptionDto>()
             .Produces<ApiErrorResponse>(404);
 
         // GET /api/tenant-subscriptions/tenant/{tenantId}
@@ -35,21 +35,21 @@ public static class TenantSubscriptionEndpoints
             .WithName("GetSubscriptionsByTenantId")
             .WithSummary("Get subscriptions by tenant ID")
             .WithDescription("Retrieve all subscriptions associated with a specific tenant")
-            .Produces<List<TenantSubscriptionDto>>(200);
+            .Produces<List<TenantSubscriptionDto>>();
 
         // GET /api/tenant-subscriptions/bundle/{bundleId}
         subscriptionGroup.MapGet("/bundle/{bundleId:guid}", GetSubscriptionsByBundleId)
             .WithName("GetSubscriptionsByBundleId")
             .WithSummary("Get subscriptions by bundle ID")
             .WithDescription("Retrieve all subscriptions associated with a specific bundle")
-            .Produces<List<TenantSubscriptionDto>>(200);
+            .Produces<List<TenantSubscriptionDto>>();
 
         // GET /api/tenant-subscriptions/active
         subscriptionGroup.MapGet("/active", GetActiveSubscriptions)
             .WithName("GetActiveSubscriptions")
             .WithSummary("Get all active subscriptions")
             .WithDescription("Retrieve all currently active subscriptions across all tenants")
-            .Produces<List<TenantSubscriptionDto>>(200);
+            .Produces<List<TenantSubscriptionDto>>();
 
         // POST /api/tenant-subscriptions
         subscriptionGroup.MapPost("/", CreateSubscription)
@@ -66,7 +66,7 @@ public static class TenantSubscriptionEndpoints
             .WithSummary("Update an existing tenant subscription")
             .WithDescription("Update an existing tenant subscription with the provided information")
             .AddEndpointFilter<ValidationFilter<UpdateTenantSubscriptionRequest>>()
-            .Produces<TenantSubscriptionDto>(200)
+            .Produces<TenantSubscriptionDto>()
             .Produces<ApiErrorResponse>(404)
             .Produces<ValidationErrorResponse>(400);
 
@@ -83,14 +83,14 @@ public static class TenantSubscriptionEndpoints
             .WithName("CheckActiveSubscription")
             .WithSummary("Check if tenant has active subscription")
             .WithDescription("Check if a tenant has an active subscription for a specific bundle")
-            .Produces<bool>(200);
+            .Produces<bool>();
 
         // GET /api/tenant-subscriptions/{id}/is-active
         subscriptionGroup.MapGet("/{id:guid}/is-active", CheckSubscriptionActive)
             .WithName("CheckSubscriptionActive")
             .WithSummary("Check if subscription is active")
             .WithDescription("Check if a specific subscription is currently active")
-            .Produces<bool>(200);
+            .Produces<bool>();
 
         return group;
     }

@@ -4,7 +4,8 @@ using Central.Domain.Entities;
 
 namespace Central.Application.Services.Interfaces;
 
-public interface ITenantService : IGenericService<Tenant, TenantDto, CreateTenantRequest, UpdateTenantRequest, TenantListRequest>
+public interface
+    ITenantService : IGenericService<Tenant, TenantDto, CreateTenantRequest, UpdateTenantRequest, TenantListRequest>
 {
     Task<Result<TenantDto>> GetByEmailAsync(string email);
     Task<Result<TenantDto>> GetByPhoneNumberAsync(string phoneNumber);

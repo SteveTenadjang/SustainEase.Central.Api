@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using Central.Domain.Entities;
-using Central.Application.DTOs;
-using Central.Domain.Interfaces;
 using Central.Application.Common;
+using Central.Application.DTOs;
 using Central.Application.Services.Interfaces;
+using Central.Domain.Entities;
+using Central.Domain.Interfaces;
+using FluentValidation;
 
 namespace Central.Application.Services;
 
@@ -16,9 +16,6 @@ public class BundleService(
     : GenericService<Bundle, BundleDto, CreateBundleRequest, UpdateBundleRequest, BundleListRequest>(bundleRepository,
         mapper, createValidator, updateValidator), IBundleService
 {
-    protected override Guid GetEntityIdFromRequest(UpdateBundleRequest request) 
-        => request.Id;
-
     public async Task<Result<BundleDto>> GetByKeyAsync(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
@@ -44,12 +41,12 @@ public class BundleService(
     public override async Task<Result<PaginatedResponse<BundleDto>>> GetAllAsync(BundleListRequest request)
     {
         var entities = await Repository.GetAllAsync();
-        
+
         var query = entities.AsQueryable();
-        
+
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(request.Search))
-            query = query.Where(b => 
+            query = query.Where(b =>
                 b.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase) ||
                 b.Key.Contains(request.Search, StringComparison.OrdinalIgnoreCase) ||
                 (b.Description != null && b.Description.Contains(request.Search, StringComparison.OrdinalIgnoreCase)));
@@ -65,15 +62,11 @@ public class BundleService(
         if (!string.IsNullOrWhiteSpace(request.SortBy))
             query = request.SortBy.ToLower() switch
             {
-                "name" => request.SortDescending ? 
-                    query.OrderByDescending(b => b.Name) : 
-                    query.OrderBy(b => b.Name),
-                "key" => request.SortDescending ? 
-                    query.OrderByDescending(b => b.Key) : 
-                    query.OrderBy(b => b.Key),
-                "createdat" => request.SortDescending ? 
-                    query.OrderByDescending(b => b.CreatedAt) : 
-                    query.OrderBy(b => b.CreatedAt),
+                "name" => request.SortDescending ? query.OrderByDescending(b => b.Name) : query.OrderBy(b => b.Name),
+                "key" => request.SortDescending ? query.OrderByDescending(b => b.Key) : query.OrderBy(b => b.Key),
+                "createdat" => request.SortDescending
+                    ? query.OrderByDescending(b => b.CreatedAt)
+                    : query.OrderBy(b => b.CreatedAt),
                 _ => query.OrderBy(b => b.Name)
             };
         else
@@ -86,7 +79,7 @@ public class BundleService(
             .ToList();
 
         var dtos = Mapper.Map<List<BundleDto>>(paginatedEntities);
-        
+
         var response = new PaginatedResponse<BundleDto>(
             dtos,
             totalCount,
@@ -95,5 +88,10 @@ public class BundleService(
         );
 
         return Result<PaginatedResponse<BundleDto>>.Success(response);
+    }
+
+    protected override Guid GetEntityIdFromRequest(UpdateBundleRequest request)
+    {
+        return request.Id;
     }
 }

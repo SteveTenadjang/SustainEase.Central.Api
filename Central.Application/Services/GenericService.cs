@@ -1,9 +1,9 @@
-﻿using Central.Application.Services.Interfaces;
+﻿using AutoMapper;
 using Central.Application.Common;
 using Central.Application.DTOs;
+using Central.Application.Services.Interfaces;
 using Central.Domain.Interfaces;
 using FluentValidation;
-using AutoMapper;
 
 namespace Central.Application.Services;
 
@@ -19,9 +19,9 @@ public abstract class GenericService<TEntity, TDto, TCreateRequest, TUpdateReque
     where TUpdateRequest : class
     where TListRequest : PaginatedRequest
 {
+    protected readonly IValidator<TCreateRequest>? CreateValidator = createValidator;
     protected readonly IMapper Mapper = mapper;
     protected readonly IGenericRepository<TEntity> Repository = repository;
-    protected readonly IValidator<TCreateRequest>? CreateValidator = createValidator;
     protected readonly IValidator<TUpdateRequest>? UpdateValidator = updateValidator;
 
     public virtual async Task<Result<TDto>> GetByIdAsync(Guid id)
@@ -46,7 +46,7 @@ public abstract class GenericService<TEntity, TDto, TCreateRequest, TUpdateReque
         var entities = await Repository.GetAllAsync();
 
         var query = entities.AsQueryable();
-        
+
         var totalCount = query.Count();
         var paginatedEntities = query
             .Skip((request.Page - 1) * request.PageSize)
@@ -115,8 +115,8 @@ public abstract class GenericService<TEntity, TDto, TCreateRequest, TUpdateReque
             return Result.Failure($"{typeof(TEntity).Name} not found.");
 
         var deleted = await Repository.DeleteAsync(id);
-        return !deleted 
-            ? Result.Failure($"Failed to delete {typeof(TEntity).Name}.") 
+        return !deleted
+            ? Result.Failure($"Failed to delete {typeof(TEntity).Name}.")
             : Result.Success();
     }
 

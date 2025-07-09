@@ -1,6 +1,6 @@
 ﻿using Central.Domain.Events;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Central.Application.Events;
 

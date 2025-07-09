@@ -16,12 +16,10 @@ public class PerformanceMiddleware(
         stopwatch.Stop();
 
         if (stopwatch.ElapsedMilliseconds > warningThresholdMs)
-        {
             logger.LogWarning("Slow request detected: {Method} {Path} took {ElapsedMs}ms",
                 context.Request.Method,
                 context.Request.Path,
                 stopwatch.ElapsedMilliseconds
             );
-        }
     }
 }

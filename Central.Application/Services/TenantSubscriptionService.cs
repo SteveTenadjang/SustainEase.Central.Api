@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using Central.Domain.Entities;
-using Central.Application.DTOs;
-using Central.Domain.Interfaces;
 using Central.Application.Common;
+using Central.Application.DTOs;
 using Central.Application.Services.Interfaces;
+using Central.Domain.Entities;
+using Central.Domain.Interfaces;
+using FluentValidation;
 
 namespace Central.Application.Services;
 
@@ -17,9 +17,6 @@ public class TenantSubscriptionService(
         UpdateTenantSubscriptionRequest, PaginatedRequest>(tenantSubscriptionRepository, mapper, createValidator,
         updateValidator), ITenantSubscriptionService
 {
-    protected override Guid GetEntityIdFromRequest(UpdateTenantSubscriptionRequest request)
-        => request.Id;
-
     public async Task<Result<List<TenantSubscriptionDto>>> GetByTenantIdAsync(Guid tenantId)
     {
         if (tenantId == Guid.Empty)
@@ -135,16 +132,13 @@ public class TenantSubscriptionService(
 
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(request.Search))
-        {
             // Search by tenant or bundle relationship would require joins
             // For now, search by duration or date ranges
             if (int.TryParse(request.Search, out var duration))
                 query = query.Where(s => s.Duration == duration);
-        }
 
         // Apply sorting
         if (!string.IsNullOrWhiteSpace(request.SortBy))
-        {
             query = request.SortBy.ToLower() switch
             {
                 "startdate" => request.SortDescending
@@ -164,7 +158,6 @@ public class TenantSubscriptionService(
                     : query.OrderBy(s => s.CreatedAt),
                 _ => query.OrderByDescending(s => s.StartDate)
             };
-        }
         else
             query = query.OrderByDescending(s => s.StartDate);
 
@@ -195,6 +188,11 @@ public class TenantSubscriptionService(
         );
 
         return Result<PaginatedResponse<TenantSubscriptionDto>>.Success(response);
+    }
+
+    protected override Guid GetEntityIdFromRequest(UpdateTenantSubscriptionRequest request)
+    {
+        return request.Id;
     }
 
     // Helper method to determine if a subscription is currently active

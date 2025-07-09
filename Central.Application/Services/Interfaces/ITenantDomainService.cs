@@ -4,7 +4,8 @@ using Central.Domain.Entities;
 
 namespace Central.Application.Services.Interfaces;
 
-public interface ITenantDomainService : IGenericService<TenantDomain, TenantDomainDto, CreateTenantDomainRequest, UpdateTenantDomainRequest, PaginatedRequest>
+public interface ITenantDomainService : IGenericService<TenantDomain, TenantDomainDto, CreateTenantDomainRequest,
+    UpdateTenantDomainRequest, PaginatedRequest>
 {
     Task<Result<TenantDomainDto>> GetByNameAsync(string name);
     Task<Result<List<TenantDomainDto>>> GetByTenantIdAsync(Guid tenantId);

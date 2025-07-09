@@ -11,8 +11,8 @@ public class TenantSubscriptionProfile : Profile
         // Entity to DTO mappings
         CreateMap<TenantSubscription, TenantSubscriptionDto>()
             .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.StartDate.AddMonths(src.Duration)))
-            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => 
-                DateTime.UtcNow >= src.StartDate && 
+            .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src =>
+                DateTime.UtcNow >= src.StartDate &&
                 DateTime.UtcNow <= src.StartDate.AddMonths(src.Duration)))
             .ForMember(dest => dest.TenantName, opt => opt.MapFrom(src => src.Tenant != null ? src.Tenant.Name : null))
             .ForMember(dest => dest.BundleName, opt => opt.MapFrom(src => src.Bundle != null ? src.Bundle.Name : null));

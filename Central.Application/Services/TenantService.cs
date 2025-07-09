@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using Central.Domain.Entities;
-using Central.Application.DTOs;
-using Central.Domain.Interfaces;
 using Central.Application.Common;
+using Central.Application.DTOs;
 using Central.Application.Events;
-using Central.Domain.Events.Tenant;
 using Central.Application.Services.Interfaces;
+using Central.Domain.Entities;
+using Central.Domain.Events.Tenant;
+using Central.Domain.Interfaces;
+using FluentValidation;
 
 namespace Central.Application.Services;
 
@@ -21,9 +21,6 @@ public class TenantService(
     : GenericService<Tenant, TenantDto, CreateTenantRequest, UpdateTenantRequest, TenantListRequest>(tenantRepository,
         mapper, createValidator, updateValidator), ITenantService
 {
-    protected override Guid GetEntityIdFromRequest(UpdateTenantRequest request)
-        => request.Id;
-
     public async Task<Result<TenantDto>> GetByEmailAsync(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
@@ -99,17 +96,13 @@ public class TenantService(
 
         // Create tenant domains if provided
         if (request.DomainNames.Count != 0)
-        {
             foreach (var domain in request.DomainNames.Select(domainName => new TenantDomain
                      {
                          Id = Guid.NewGuid(),
                          TenantId = createdTenant.Id,
                          Name = domainName
                      }))
-            {
                 await tenantDomainRepository.AddAsync(domain);
-            }
-        }
 
         // Dispatch TenantCreated event
         var tenantCreatedEvent = new TenantCreatedEvent(createdTenant.Id, createdTenant.Name, createdTenant.Email);
@@ -127,12 +120,10 @@ public class TenantService(
 
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(request.Search))
-        {
             query = query.Where(t =>
                 t.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase) ||
                 t.Email.Contains(request.Search, StringComparison.OrdinalIgnoreCase) ||
                 (t.PhoneNumber != null && t.PhoneNumber.Contains(request.Search, StringComparison.OrdinalIgnoreCase)));
-        }
 
         // Apply Tenant-specific filters
         if (!string.IsNullOrWhiteSpace(request.Name))
@@ -146,7 +137,6 @@ public class TenantService(
 
         // Apply sorting
         if (!string.IsNullOrWhiteSpace(request.SortBy))
-        {
             query = request.SortBy.ToLower() switch
             {
                 "name" => request.SortDescending ? query.OrderByDescending(t => t.Name) : query.OrderBy(t => t.Name),
@@ -159,7 +149,6 @@ public class TenantService(
                     : query.OrderBy(t => t.CreatedAt),
                 _ => query.OrderBy(t => t.Name)
             };
-        }
         else
             query = query.OrderBy(t => t.Name);
 
@@ -179,5 +168,10 @@ public class TenantService(
         );
 
         return Result<PaginatedResponse<TenantDto>>.Success(response);
+    }
+
+    protected override Guid GetEntityIdFromRequest(UpdateTenantRequest request)
+    {
+        return request.Id;
     }
 }

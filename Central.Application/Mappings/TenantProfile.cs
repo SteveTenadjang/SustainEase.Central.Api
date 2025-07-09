@@ -10,10 +10,10 @@ public class TenantProfile : Profile
     {
         // Entity to DTO mappings
         CreateMap<Tenant, TenantDto>();
-        
+
         CreateMap<TenantDomain, TenantDomainDto>();
         CreateMap<TenantSubscription, TenantSubscriptionDto>();
-        
+
         // Request to Entity mappings
         CreateMap<CreateTenantRequest, Tenant>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => Guid.NewGuid()))

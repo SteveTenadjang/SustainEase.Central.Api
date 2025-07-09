@@ -65,7 +65,11 @@ Content-Type: application/json
   "phoneNumber": "+1234567890",
   "primaryColor": "#FF0000",
   "secondaryColor": "#00FF00",
-  "domainNames": ["acme-main", "acme-dev", "acme-staging"]
+  "domainNames": [
+    "acme-main",
+    "acme-dev",
+    "acme-staging"
+  ]
 }
 
 ### Create simple tenant (without domains)

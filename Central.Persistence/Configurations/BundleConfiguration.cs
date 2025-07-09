@@ -8,7 +8,7 @@ public class BundleConfiguration : BaseEntityConfiguration<Bundle>
     public override void Configure(EntityTypeBuilder<Bundle> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(100);

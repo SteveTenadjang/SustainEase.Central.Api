@@ -8,26 +8,24 @@ public static class ResultExtensions
     public static IResult ToHttpResponse<T>(this Result<T> result)
     {
         if (result.IsSuccess)
-        {
-            return result.Data != null 
-                ? Results.Ok(result.Data) 
+            return result.Data != null
+                ? Results.Ok(result.Data)
                 : Results.NoContent();
-        }
 
         return CreateErrorResponse(result.Error!, result.Errors);
     }
 
     public static IResult ToHttpResponse(this Result result)
     {
-        return result.IsSuccess 
-            ? Results.NoContent() 
+        return result.IsSuccess
+            ? Results.NoContent()
             : CreateErrorResponse(result.Error!, result.Errors);
     }
 
     public static IResult ToCreatedResponse<T>(this Result<T> result, string location)
     {
-        return result.IsSuccess 
-            ? Results.Created(location, result.Data) 
+        return result.IsSuccess
+            ? Results.Created(location, result.Data)
             : CreateErrorResponse(result.Error!, result.Errors);
     }
 

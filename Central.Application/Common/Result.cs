@@ -2,11 +2,6 @@
 
 public class Result<T>
 {
-    public bool IsSuccess { get; }
-    public T? Data { get; }
-    public string? Error { get; }
-    public List<string> Errors { get; } = new();
-
     protected Result(bool isSuccess, T? data, string? error = null)
     {
         IsSuccess = isSuccess;
@@ -14,8 +9,21 @@ public class Result<T>
         Error = error;
     }
 
-    public static Result<T> Success(T data) => new(true, data);
-    public static Result<T> Failure(string error) => new(false, default, error);
+    public bool IsSuccess { get; }
+    public T? Data { get; }
+    public string? Error { get; }
+    public List<string> Errors { get; } = new();
+
+    public static Result<T> Success(T data)
+    {
+        return new Result<T>(true, data);
+    }
+
+    public static Result<T> Failure(string error)
+    {
+        return new Result<T>(false, default, error);
+    }
+
     public static Result<T> Failure(List<string> errors)
     {
         var result = new Result<T>(false, default);
@@ -26,18 +34,26 @@ public class Result<T>
 
 public class Result
 {
-    public bool IsSuccess { get; }
-    public string? Error { get; }
-    public List<string> Errors { get; } = new();
-
     protected Result(bool isSuccess, string? error = null)
     {
         IsSuccess = isSuccess;
         Error = error;
     }
 
-    public static Result Success() => new(true);
-    public static Result Failure(string error) => new(false, error);
+    public bool IsSuccess { get; }
+    public string? Error { get; }
+    public List<string> Errors { get; } = new();
+
+    public static Result Success()
+    {
+        return new Result(true);
+    }
+
+    public static Result Failure(string error)
+    {
+        return new Result(false, error);
+    }
+
     public static Result Failure(List<string> errors)
     {
         var result = new Result(false);

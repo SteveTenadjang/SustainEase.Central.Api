@@ -18,7 +18,8 @@ public static class TenantSubscriptionFaker
         var subscriptionFaker = new Faker<TenantSubscription>()
             .RuleFor(ts => ts.Id, f => Guid.NewGuid())
             .RuleFor(ts => ts.Duration, f => f.PickRandom(30, 90, 180, 365))
-            .RuleFor(ts => ts.StartDate, f => f.Date.Between(DateTime.UtcNow.AddMonths(-6), DateTime.UtcNow.AddMonths(1)))
+            .RuleFor(ts => ts.StartDate,
+                f => f.Date.Between(DateTime.UtcNow.AddMonths(-6), DateTime.UtcNow.AddMonths(1)))
             .RuleFor(ts => ts.CreatedAt, f => f.Date.Between(DateTime.UtcNow.AddMonths(-6), DateTime.UtcNow));
 
         foreach (var tenant in tenants)

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using Central.Domain.Entities;
-using Central.Application.DTOs;
-using Central.Domain.Interfaces;
 using Central.Application.Common;
+using Central.Application.DTOs;
 using Central.Application.Services.Interfaces;
+using Central.Domain.Entities;
+using Central.Domain.Interfaces;
+using FluentValidation;
 
 namespace Central.Application.Services;
 
@@ -16,9 +16,6 @@ public class TenantDomainService(
     : GenericService<TenantDomain, TenantDomainDto, CreateTenantDomainRequest, UpdateTenantDomainRequest,
         PaginatedRequest>(tenantDomainRepository, mapper, createValidator, updateValidator), ITenantDomainService
 {
-    protected override Guid GetEntityIdFromRequest(UpdateTenantDomainRequest request) 
-        => request.Id;
-
     public async Task<Result<TenantDomainDto>> GetByNameAsync(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -54,37 +51,29 @@ public class TenantDomainService(
     public override async Task<Result<PaginatedResponse<TenantDomainDto>>> GetAllAsync(PaginatedRequest request)
     {
         var entities = await Repository.GetAllAsync();
-        
+
         var query = entities.AsQueryable();
-        
+
         // Apply search filter
         if (!string.IsNullOrWhiteSpace(request.Search))
-        {
-            query = query.Where(d => 
+            query = query.Where(d =>
                 d.Name.Contains(request.Search, StringComparison.OrdinalIgnoreCase));
-        }
 
         // Apply sorting
         if (!string.IsNullOrWhiteSpace(request.SortBy))
-        {
             query = request.SortBy.ToLower() switch
             {
-                "name" => request.SortDescending ? 
-                    query.OrderByDescending(d => d.Name) : 
-                    query.OrderBy(d => d.Name),
-                "tenantid" => request.SortDescending ? 
-                    query.OrderByDescending(d => d.TenantId) : 
-                    query.OrderBy(d => d.TenantId),
-                "createdat" => request.SortDescending ? 
-                    query.OrderByDescending(d => d.CreatedAt) : 
-                    query.OrderBy(d => d.CreatedAt),
+                "name" => request.SortDescending ? query.OrderByDescending(d => d.Name) : query.OrderBy(d => d.Name),
+                "tenantid" => request.SortDescending
+                    ? query.OrderByDescending(d => d.TenantId)
+                    : query.OrderBy(d => d.TenantId),
+                "createdat" => request.SortDescending
+                    ? query.OrderByDescending(d => d.CreatedAt)
+                    : query.OrderBy(d => d.CreatedAt),
                 _ => query.OrderBy(d => d.Name)
             };
-        }
         else
-        {
             query = query.OrderBy(d => d.Name);
-        }
 
         var totalCount = query.Count();
         var paginatedEntities = query
@@ -93,7 +82,7 @@ public class TenantDomainService(
             .ToList();
 
         var dtos = Mapper.Map<List<TenantDomainDto>>(paginatedEntities);
-        
+
         var response = new PaginatedResponse<TenantDomainDto>(
             dtos,
             totalCount,
@@ -102,5 +91,10 @@ public class TenantDomainService(
         );
 
         return Result<PaginatedResponse<TenantDomainDto>>.Success(response);
+    }
+
+    protected override Guid GetEntityIdFromRequest(UpdateTenantDomainRequest request)
+    {
+        return request.Id;
     }
 }

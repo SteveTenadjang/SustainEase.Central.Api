@@ -20,14 +20,14 @@ public static class TenantEndpoints
             .WithName("GetAllTenants")
             .WithSummary("Get all tenants with pagination")
             .WithDescription("Retrieve a paginated list of tenants with optional filtering and sorting")
-            .Produces<PaginatedResponse<TenantDto>>(200);
+            .Produces<PaginatedResponse<TenantDto>>();
 
         // GET /api/tenants/{id}
         tenantGroup.MapGet("/{id:guid}", GetTenantById)
             .WithName("GetTenantById")
             .WithSummary("Get tenant by ID")
             .WithDescription("Retrieve a specific tenant by its unique identifier")
-            .Produces<TenantDto>(200)
+            .Produces<TenantDto>()
             .Produces<ApiErrorResponse>(404);
 
         // GET /api/tenants/email/{email}
@@ -35,14 +35,15 @@ public static class TenantEndpoints
             .WithName("GetTenantByEmail")
             .WithSummary("Get tenant by email")
             .WithDescription("Retrieve a specific tenant by its email address")
-            .Produces<TenantDto>(200)
+            .Produces<TenantDto>()
             .Produces<ApiErrorResponse>(404);
 
         // POST /api/tenants
         tenantGroup.MapPost("/", CreateTenant)
             .WithName("CreateTenant")
             .WithSummary("Create a new tenant")
-            .WithDescription("Create a new tenant with the provided information. This will trigger a TenantCreated event.")
+            .WithDescription(
+                "Create a new tenant with the provided information. This will trigger a TenantCreated event.")
             .AddEndpointFilter<ValidationFilter<CreateTenantRequest>>()
             .Produces<TenantDto>(201)
             .Produces<ValidationErrorResponse>(400);
@@ -53,7 +54,7 @@ public static class TenantEndpoints
             .WithSummary("Update an existing tenant")
             .WithDescription("Update an existing tenant with the provided information")
             .AddEndpointFilter<ValidationFilter<UpdateTenantRequest>>()
-            .Produces<TenantDto>(200)
+            .Produces<TenantDto>()
             .Produces<ApiErrorResponse>(404)
             .Produces<ValidationErrorResponse>(400);
 

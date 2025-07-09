@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Central.Persistence.Configurations;
 
-public class TenantSubscriptionConfiguration :  BaseEntityConfiguration<TenantSubscription>
+public class TenantSubscriptionConfiguration : BaseEntityConfiguration<TenantSubscription>
 {
     public override void Configure(EntityTypeBuilder<TenantSubscription> builder)
     {
         base.Configure(builder);
-        
+
         builder.Property(b => b.TenantId)
             .HasConversion<Guid>()
             .IsRequired();

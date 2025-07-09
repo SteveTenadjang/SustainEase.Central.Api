@@ -4,8 +4,6 @@ namespace Central.Application.Exceptions;
 
 public class ValidationException() : ApplicationException("One or more validation failures have occurred.")
 {
-    public Dictionary<string, string[]> Errors { get; } = new();
-
     public ValidationException(IEnumerable<ValidationFailure> failures) : this()
     {
         Errors = failures
@@ -17,4 +15,6 @@ public class ValidationException() : ApplicationException("One or more validatio
     {
         Errors.Add(propertyName, [errorMessage]);
     }
+
+    public Dictionary<string, string[]> Errors { get; } = new();
 }

@@ -22,7 +22,7 @@ public static class TenantFaker
             .RuleFor(t => t.CreatedAt, f => f.Date.Between(DateTime.UtcNow.AddYears(-2), DateTime.UtcNow));
 
         var tenants = tenantFaker.Generate(50);
-            
+
         await dbContext.Tenants.AddRangeAsync(tenants);
         await dbContext.SaveChangesAsync();
     }
